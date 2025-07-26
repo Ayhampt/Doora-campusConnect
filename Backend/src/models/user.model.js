@@ -29,6 +29,7 @@ const userSchema = new Schema(
     },
     phone: {
       type: Number,
+      unique: true,
     },
     role: {
       type: String,
@@ -47,53 +48,15 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    address: {
-      street: String,
-      city: String,
-      state: String,
-      pinCode: String,
-      country: String,
-    },
+
     isVerified: {
       type: Boolean,
       default: false,
     },
-    businessName: {
-      type: String,
-      trim: true,
-    },
-    businessDescription: {
-      type: String,
-      trim: true,
-    },
-    certifications: [
-      {
-        name: String,
-        issuer: String,
-        dateIssued: Date,
-        expiryDate: Date,
-        documentUrl: String,
-      },
-    ],
-    portfolio: [
-      {
-        title: String,
-        description: String,
-        imageUrl: String,
-        projectDate: Date,
-      },
-    ],
-    rating: {
-      average: {
-        type: Number,
-        default: 0,
-      },
-      count: {
-        type: Number,
-        default: 0,
-      },
-    },
-    
+    forgotPasswordToken: String,
+    forgotPasswordTokenExpiry: Date,
+    verifyToken: String,
+    verifyTokenExpiry: Date,
   },
   { timestamps: true }
 );
@@ -101,7 +64,7 @@ const userSchema = new Schema(
 //Password encryption using bcrypt
 
 userSchema.pre("save", async function (next) {
-  if (!this.modified("password")) return next();
+  if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 10);
 
