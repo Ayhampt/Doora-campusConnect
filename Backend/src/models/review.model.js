@@ -31,27 +31,8 @@ const reviewSchema = new Schema(
         min: 1,
         max: 5,
       },
-      communication: {
-        type: Number,
-        min: 1,
-        max: 5,
+      
       },
-      quality: {
-        type: Number,
-        min: 1,
-        max: 5,
-      },
-      punctuality: {
-        type: Number,
-        min: 1,
-        max: 5,
-      },
-      value: {
-        type: Number,
-        min: 1,
-        max: 5,
-      },
-    },
     title: {
       type: String,
       trim: true,
@@ -67,10 +48,6 @@ const reviewSchema = new Schema(
         url: String, //cloudinary url
       },
     ],
-    isPublic: {
-      type: Boolean,
-      default: true,
-    },
   },
   {
     timestamps: true,

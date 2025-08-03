@@ -29,72 +29,84 @@ export const sendEmail = async ({ email, emailType, userId }) => {
       },
     });
     const action = emailType == "VERIFY" ? "Verify  Email" : "Reset Password";
-
-    const endPoint = emailType == "VERIFY" ? "verifyemail" : "forgotpassword";
+    const user = await User.findOne({ _id: userId });
+    const name = user.firstname;
+    const endPoint = emailType == "VERIFY" ? "verifyemail" : "resetPassword";
 
     const link = `${process.env.DOMAIN}/${endPoint}?token=${hashedToken}`;
     const content =
       emailType == "VERIFY"
         ? "Thank you for registering! Please click the button below to verify your account."
         : " We received a request to reset the password for your account. If you made this request, please click the button below to set a new password.";
-    const main =
+    /* const main =
       emailType == "VERIFY"
         ? "Verify Your Email Address"
-        : "Reset Your Password";
+        : "Reset Your Password";*/
 
     const mailOptions = {
       from: "doora@no-reply.in",
       to: email,
       subject: emailType === "VERIFY" ? "verify your Email" : "Reset Password",
       html: `
-        <!-- Gradient Background Wrapper -->
-<div style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); padding: 50px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
 
-  <!-- Gradient Content Card -->
-  <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(145deg, #1e2022, #232526, #414345); border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); padding: 40px 30px; color: #ffffff;">
+  <body style="margin: 0; padding: 0; background-color: #ffffff; font-family: Arial, sans-serif;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="padding: 20px 0;">
+      <tr>
+        <td align="center">
+          <!-- Container Table -->
+          <table width="608" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff;">
+            <!-- Logo Section -->
+            <tr>
+              <td style="padding: 20px 30px; font-size: 60px; font-weight: bold; color: #585b5e;">
+                <span style="color: #585b5e;">D</span><span style="color: #0071e2;">oo</span><span style="color: #585b5e;">ra</span>
+              </td>
+            </tr>
 
-    <!-- Logo -->
-    <div style="text-align: center; margin-bottom: 25px;">
-      <img src="https://i.pinimg.com/736x/bc/2f/58/bc2f589c19c7abf184d7ef9a88e4b8bd.jpg" alt="Company Logo" style="max-width: 130px; border-radius: 30%; box-shadow: 0 0 12px rgba(252,255,251,0.9);">
-    </div>
+            <!-- Greeting -->
+            <tr>
+              <td style="padding: 20px 30px 10px; font-size: 22px; color: #616161;">
+                Hi ${name},
+              </td>
+            </tr>
 
-    <!-- Heading -->
-    <h1 style="font-size: 28px; text-align: center; margin: 0 0 20px; line-height: 1.3; letter-spacing: 0.5px;">${main}</h1>
+            <!-- Main Content -->
+            <tr>
+              <td style="padding: 10px 30px 20px; font-size: 22px; color: #6f6f6f;">
+                ${content}
+              </td>
+            </tr>
 
-    <!-- Body Text -->
-    <p style="font-size: 16px; color: #e0e0e0; text-align: center; line-height: 1.6; margin-bottom: 35px;">
-      ${content}
-    </p>
+            <!-- Button -->
+            <tr>
+              <td align="left" style="padding: 25px 30px 30px;">
+                <a href="${link}" style="display: inline-block; padding: 15px 30px; background-color: #198dcf; color: #eaf3f8; text-decoration: none; border-radius: 26px; font-size: 20px; font-weight: bold;">
+                  ${action}
+                </a>
+              </td>
+            </tr>
 
-    <!-- CTA Button -->
-    <div style="text-align: center; margin-bottom: 35px;">
-      <a href="${link}" 
-         style="display: inline-block; padding: 15px 35px; background: linear-gradient(135deg, #1a0004, #601417, #ff3c38); color: #ffffff; font-size: 18px; font-weight: bold; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 15px rgba(255,81,47,0.4); transition: background 0.3s ease, color 0.3s ease;"
-         onmouseover="this.style.background='linear-gradient(135deg, #ff4f5a, #c91345)'; this.style.color='#000';"
-         onmouseout="this.style.background='linear-gradient(135deg, #1a0004, #601417, #ff3c38)'; this.style.color='#fff';"
-      >
-        ${action}
-      </a>
-    </div>
+            <!-- Secondary Message -->
+            <tr>
+              <td style="padding: 0 30px 40px; font-size: 16px; color: #6b6b6b;">
+                If the button above doesn’t work, copy and paste this link into your browser:<br />
+                <a href="${link}" style="color: #198dcf; word-break: break-all;">${link}</a>
+              </td>
+            </tr>
 
-    <!-- Fallback Link -->
-    <p style="font-size: 14px; color: #dddddd; text-align: center; line-height: 1.5;">
-      If the button above doesn’t work, copy and paste this link into your browser:
-      <br><br>
-      <a href="${link}" style="color: #57b0ff; text-decoration: underline; word-break: break-word;">${link}</a>
-    </p>
-
-    <!-- Footer -->
-    <div style="border-top: 1px solid rgba(255,255,255,0.15); margin-top: 40px; padding-top: 20px; text-align: center; font-size: 12px; color: #cccccc;">
-      <p>&copy; 2025 <strong style="color:#fff;">Doora</strong>. All rights reserved.</p>
-      <p>
-        <a href="https://example.com/privacy" style="color: #cccccc; text-decoration: none;">Privacy Policy</a> |
-        <a href="https://example.com/terms" style="color: #cccccc; text-decoration: none;">Terms of Service</a>
-      </p>
-    </div>
-
-  </div>
-</div>
+            <!-- Optional Background Side Image (Can be removed for email safety) -->
+            <!-- If you need a side image, it should be in a separate table column, not absolutely positioned -->
+          </table>
+        </td>
+      </tr>
+    </table>
+     <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="padding: 20px 0;">
+      <tr>
+        <td align="center" style="font-size: 14px; color: #999999; font-family: Arial, sans-serif; padding-top: 20px;">
+          &copy; 2025 Doora. All rights reserved.
+        </td>
+      </tr>
+    </table>
+ </body>
 
         `,
     };

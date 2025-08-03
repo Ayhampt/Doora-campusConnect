@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 const serviceSchema = new Schema({
-  //created by admin
+  
   title: {
     type: String,
     required: true,
@@ -22,43 +22,19 @@ const serviceSchema = new Schema({
     ref: "Category",
     required: true,
   },
-  subcategory: {
-    type: Schema.Types.ObjectId,
-    ref: "Category",
-  },
   pricing: {
-    type: {
-      type: Number,
-      required: true,
-    },
-  },
-  packages: [
-    {
-      name: String,
-      description: String,
-      price: Number,
-      duration: String,
-      features: [String],
-    },
-  ],
-  images: [
-    {
-      url: String,
-    },
-  ],
-  rating: {
-    average: {
-      type: Number,
-      default: 0,
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-  },
-  bookingCount: {
     type: Number,
+    required: true,
     default: 0,
+  },
+  images: {
+    required: true,
+    type:String
+  },
+  rating: {
+    type:Schema.Types.ObjectId,
+    ref:"Review"
+    
   },
 });
 serviceSchema.plugin(mongooseAggregatePaginate);

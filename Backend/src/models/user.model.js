@@ -31,11 +31,7 @@ const userSchema = new Schema(
       type: Number,
       unique: true,
     },
-    role: {
-      type: String,
-      enum: ["customer", "admin"],
-      default: "customer",
-    },
+
     bookings: [
       {
         type: Schema.Types.ObjectId,
@@ -47,6 +43,9 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
+      default: {
+        url: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr861kXpBOYSYu2w_bwebEp5O9Vt1YCL3B1A&s`,
+      },
     },
 
     isVerified: {
