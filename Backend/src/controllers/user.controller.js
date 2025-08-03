@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import fs from "fs";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { sendEmail } from "../utils/mailer.js";
 
@@ -27,7 +28,7 @@ const generateAcessAndRefreshToken = async (userId) => {
 
 //register user
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstname, lastname, email, password, phone, role } = req.body;
+  const { firstname, lastname, email, password, phone, } = req.body;
   if (firstname?.trim() === "") {
     throw new ApiError(400, "firstname required");
   }
@@ -56,44 +57,52 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "failed to upload avatar");
   }
 
-  const user = await User.create({
-    firstname: firstname,
-    lastname: lastname,
-    email: email,
-    password: password,
-    phone: phone,
-    role: role?.role || "customer",
-    avatar: avatar?.url,
-  });
-
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
-
-  if (!createdUser) {
-    throw new ApiError(500, "somthing went wrong while creating user");
-  }
-
   try {
-    await sendEmail({
-      email: createdUser.email,
-      emailType: "VERIFY",
-      userId: createdUser._id,
+    const user = await User.create({
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      password: password,
+      phone: phone,
+      avatar: avatar?.url,
     });
-  } catch (error) {
-    throw new ApiError(401, "failed to send verification email", error);
-  }
-
-  return res
-    .status(201)
-    .json(
-      new ApiResponse(
-        201,
-        "user created",
-        "user registerd sucessfully,please verify your email",
-        createdUser
-      )
+  
+    const createdUser = await User.findById(user._id).select(
+      "-password -refreshToken"
     );
+  
+    if (!createdUser) {
+      throw new ApiError(500, "somthing went wrong while creating user");
+    }
+  
+    try {
+      await sendEmail({
+        email: createdUser.email,
+        emailType: "VERIFY",
+        userId: createdUser._id,
+      });
+    } catch (error) {
+      throw new ApiError(401, "failed to send verification email", error);
+    }
+  
+    return res
+      .status(201)
+      .json(
+        new ApiResponse(
+          201,
+          "user created",
+          "user registerd sucessfully,please verify your email",
+          createdUser
+        )
+      );
+  } catch (error) {
+    console.log("error creating user", error);
+    if(avatar){
+      await deleteOnCloudinary(avatar.public_id);
+    }
+
+    throw new ApiError(500, "somthing went wrong while creating user and avatar delete from Cloudinary");
+  }
 });
 //login user
 const loginUser = asyncHandler(async (req, res) => {
