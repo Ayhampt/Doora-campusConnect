@@ -1,4 +1,4 @@
-# Doora Services Marketplace - Backend
+# Doora campus connect - Backend
 
 A comprehensive service marketplace backend built with Node.js, Express.js, and MongoDB. This platform connects service providers with customers, enabling seamless booking and management of various services.
 
