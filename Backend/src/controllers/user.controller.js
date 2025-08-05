@@ -144,6 +144,8 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 //verifyemail
 const verifyEmail = asyncHandler(async (req, res) => {
+  console.log("token :",req.body);
+  
   const { token } = req.body;
   const user = await User.findOne({
     verifyToken: token,

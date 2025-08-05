@@ -33,7 +33,8 @@ export const sendEmail = async ({ email, emailType, userId }) => {
     const name = user.firstname;
     const endPoint = emailType == "VERIFY" ? "verifyemail" : "resetPassword";
 
-    const link = `${process.env.DOMAIN}/${endPoint}?token=${hashedToken}`;
+
+    const link = `${process.env.DOMAIN}/${process.env.API_USER_ENDPOINT}/${endPoint}?token=${hashedToken}`;
     const content =
       emailType == "VERIFY"
         ? "Thank you for registering! Please click the button below to verify your account."
