@@ -1,6 +1,6 @@
 # Doora campus connect - Backend
 
-A comprehensive campus connect Web app built with Node.js, Express.js, and MongoDB. This platform connects service providers with customers, enabling seamless booking and management of various services.
+A comprehensive campus connect Web app built with Node.js, Express.js, and MongoDB. 
 
 ## 🚀 Features
 
