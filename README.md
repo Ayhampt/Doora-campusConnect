@@ -1,19 +1,18 @@
 # Doora campus connect - Backend
 
-A comprehensive service marketplace backend built with Node.js, Express.js, and MongoDB. This platform connects service providers with customers, enabling seamless booking and management of various services.
+A comprehensive campus connect Web app built with Node.js, Express.js, and MongoDB. This platform connects service providers with customers, enabling seamless booking and management of various services.
 
 ## 🚀 Features
 
-- **User Management**: Customer and Admin registration/authentication
+- **User Management**: user registration/authentication
 - **Service Management**: Create, read, update, and delete services
 - **Category Management**: Hierarchical category system with subcategories
 - **Booking System**: Complete booking workflow with status tracking
-- **Appointment Management**: Schedule and manage appointments
 - **Review System**: Comprehensive rating and review system
 - **File Upload**: Cloudinary integration for image uploads
 - **Email Services**: Nodemailer integration for email notifications
 - **Authentication**: JWT-based authentication with refresh tokens
-- **Role-based Access**: Customer and Admin role management
+
 
 ## 🛠️ Technology Stack
 
@@ -59,7 +58,7 @@ Create a `.env` file in the Backend directory with the following variables:
 ```env
 # Server Configuration
 PORT=8001
-CORS_ORIGIN=http://localhost:3000
+CORS_ORIGIN=*
 
 # Database Configuration
 MONGO_URI=mongodb://localhost:27017
