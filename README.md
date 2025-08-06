@@ -5,10 +5,9 @@ A comprehensive campus connect Web app built with Node.js, Express.js, and Mongo
 ## 🚀 Features
 
 - **User Management**: user registration/authentication
-- **Service Management**: Create, read, update, and delete services
+- **Launch Management**: Create, read, update, and delete Launch
 - **Category Management**: Hierarchical category system with subcategories
-- **Booking System**: Complete booking workflow with status tracking
-- **Review System**: Comprehensive rating and review system
+- **events System**: Complete booking workflow with status tracking
 - **File Upload**: Cloudinary integration for image uploads
 - **Email Services**: Nodemailer integration for email notifications
 - **Authentication**: JWT-based authentication with refresh tokens
@@ -138,11 +137,10 @@ Backend/
 ├── src/
 │   ├── controllers/          # Request handlers
 │   │   ├── favorite.controller.js
-│   │   ├── booking.controller.js
+│   │   ├── events.controller.js
 │   │   ├── category.controller.js
 │   │   ├── healthCheck.controller.js
-│   │   ├── review.controller.js
-│   │   ├── service.controller.js
+│   │   ├── Launch.controller.js
 │   │   ├── dashboard.controller.js
 │   │   ├── profile.controller.js
 │   │   └── user.controller.js
@@ -155,10 +153,9 @@ Backend/
 │   │   └── multer.middleware.js
 │   ├── models/               # Mongoose models
 │   │   ├── favorite.model.js
-│   │   ├── booking.model.js
+│   │   ├── events.model.js
 │   │   ├── category.model.js
-│   │   ├── review.model.js
-│   │   ├── service.model.js
+│   │   ├── Launch.model.js
 |   |   ├── profile.model.js
 |   |   ├── dashboard.model.js
 │   │   └── user.model.js

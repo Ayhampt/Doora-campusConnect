@@ -22,19 +22,9 @@ const serviceSchema = new Schema({
     ref: "Category",
     required: true,
   },
-  pricing: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
   images: {
     required: true,
     type:String
-  },
-  rating: {
-    type:Schema.Types.ObjectId,
-    ref:"Review"
-    
   },
 });
 serviceSchema.plugin(mongooseAggregatePaginate);
