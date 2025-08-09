@@ -1,6 +1,6 @@
 # Doora campus connect - Backend
 
-A comprehensive campus connect Web app built with Node.js, Express.js, and MongoDB. 
+A comprehensive campus connect Web app built with Node.js, Express.js, and MongoDB. This platform connects campus
 
 ## 🚀 Features
 
@@ -136,12 +136,10 @@ The server will start on `http://localhost:8001` (or your specified PORT).
 Backend/
 ├── src/
 │   ├── controllers/          # Request handlers
-│   │   ├── favorite.controller.js
 │   │   ├── events.controller.js
 │   │   ├── category.controller.js
 │   │   ├── healthCheck.controller.js
 │   │   ├── Launch.controller.js
-│   │   ├── dashboard.controller.js
 │   │   ├── profile.controller.js
 │   │   └── user.controller.js
 │   ├── db/                   # Database configuration
@@ -152,12 +150,10 @@ Backend/
 │   │   ├── error.middleware.js
 │   │   └── multer.middleware.js
 │   ├── models/               # Mongoose models
-│   │   ├── favorite.model.js
 │   │   ├── events.model.js
 │   │   ├── category.model.js
 │   │   ├── Launch.model.js
 |   |   ├── profile.model.js
-|   |   ├── dashboard.model.js
 │   │   └── user.model.js
 │   ├── routes/               # API routes
 │   │   ├── healthCheck.route.js
