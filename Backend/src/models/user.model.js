@@ -1,5 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 
 const userSchema = new Schema(
   {
@@ -31,13 +33,6 @@ const userSchema = new Schema(
       type: Number,
       unique: true,
     },
-
-    bookings: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Booking",
-      },
-    ],
     refreshToken: {
       type: String,
     },
@@ -70,7 +65,7 @@ userSchema.pre("save", async function (next) {
 //password decryption using bcrypt
 
 userSchema.methods.isPasswordCorrect = async function (password) {
-  await bcrypt.compare(password, this.password);
+ return await bcrypt.compare(password, this.password);
 };
 
 //generate accessToken

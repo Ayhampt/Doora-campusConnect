@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
-const serviceSchema = new Schema({
+const LaunchSchema = new Schema({
   
   title: {
     type: String,
@@ -12,20 +12,24 @@ const serviceSchema = new Schema({
     required: true,
     trim: true,
   },
-  provider: {
+  owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   category: {
-    type: Schema.Types.ObjectId,
-    ref: "Category",
+    type: String,
     required: true,
+    trim: true,
+    lowercase: true,
+    enum: ["web development", "mobile app", "ai/ml", "data science", "game development", "iot", "blockchain", "cybersecurity", "ui/ux design", "other"],
+    default: "other"
   },
   images: {
     required: true,
-    type:String
+    type: String
   },
-});
-serviceSchema.plugin(mongooseAggregatePaginate);
-export const Service = mongoose.model("Service", serviceSchema);
+  
+}, { timestamps: true });
+LaunchSchema.plugin(mongooseAggregatePaginate);
+export const Launch = mongoose.model("Launch", LaunchSchema);

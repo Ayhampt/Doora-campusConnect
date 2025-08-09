@@ -1,10 +1,14 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const profileSchema = new Schema(
   {
+    avatar: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       unique: true,
     },
@@ -14,6 +18,7 @@ const profileSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     bio: {
       type: String,
@@ -21,33 +26,45 @@ const profileSchema = new Schema(
     },
 
     // Professional Info
-    skills: [{
-      type: String,
-      trim: true,
-      lowercase: true,
-    }],
-    categories: [{
-      type: String,
-      enum: ['web development', 'graphic design', 'writing', 'marketing', 'video editing', 'data entry', 'other'],
-      lowercase: true,
-    }],
+    skills: [
+      {
+        type: String,
+        trim: true,
+        lowercase: true,
+      },
+    ],
+    categories: [
+      {
+        type: String,
+        enum: [
+          "web development",
+          "graphic design",
+          "writing",
+          "marketing",
+          "video editing",
+          "app development",
+          "photography",
+          "music production",
+          "other",
+        ],
+        lowercase: true,
+      },
+    ],
     experienceLevel: {
       type: String,
-      enum: ['beginner', 'intermediate', 'expert'],
-      default: 'beginner',
-    },
-    hourlyRate: {
-      type: Number,
-      min: 0,
+      enum: ["beginner", "intermediate", "expert"],
+      default: "beginner",
     },
 
     // Portfolio & Work
-    portfolio: [{
-      title: String,
-      description: String,
-      projectUrl: String,
-      imageUrl: String,
-    }],
+    portfolio: [
+      {
+        title: String,
+        description: String,
+        link: String,
+        image: String,
+      },
+    ],
 
     // Social Links
     socialLinks: {
@@ -57,23 +74,28 @@ const profileSchema = new Schema(
       twitter: String,
       dribbble: String,
     },
-
-    // Ratings & Reviews
-    averageRating: {
-      type: Number,
-      min: 0,
-      max: 5,
-      default: 0,
-    },
-    reviewCount: {
-      type: Number,
-      default: 0,
-    },
+    launches: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Launch",
+      },
+    ],
+    eventsHosted:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      }
+    ],
+    eventsAttended:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      }
+    ]
   },
   {
     timestamps: true,
   }
 );
 
-export const Profile = mongoose.model('Profile', profileSchema);
-
+export const Profile = mongoose.model("Profile", profileSchema);

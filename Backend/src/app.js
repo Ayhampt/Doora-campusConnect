@@ -17,13 +17,19 @@ app.use(cookieParser());
 
 //import route
 import healthCheckRouter from "./routes/healthCheck.route.js";
-import userRouter from "./routes/user.route.js"
+import userRouter from "./routes/user.route.js";
+import launchRouter from "./routes/launch.route.js";
+import eventsRouter from "./routes/events.route.js";
+import profileRouter from "./routes/profile.route.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
 
 //use route
-app.use("/api/v1/healthcheck",healthCheckRouter);
+app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/launches", launchRouter);
+app.use("/api/v1/events", eventsRouter);
+app.use("/api/v1/profile", profileRouter);
 app.use(errorHandler)
 
 export { app };

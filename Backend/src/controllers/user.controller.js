@@ -12,13 +12,17 @@ import { sendEmail } from "../utils/mailer.js";
 const generateAcessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = await generateAccessToken();
-    const refreshToken = await generateRefreshToken();
+    if (!user) {
+      throw new ApiError(404, "User not found while generating tokens");
+    }
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
   } catch (error) {
+    console.error("🔴 Token generation error:", error);
     throw new ApiError(
       500,
       "somthing went wrong while generating access and refresh token"
@@ -28,7 +32,7 @@ const generateAcessAndRefreshToken = async (userId) => {
 
 //register user
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstname, lastname, email, password, phone, } = req.body;
+  const { firstname, lastname, email, password, phone } = req.body;
   if (firstname?.trim() === "") {
     throw new ApiError(400, "firstname required");
   }
@@ -66,15 +70,15 @@ const registerUser = asyncHandler(async (req, res) => {
       phone: phone,
       avatar: avatar?.url,
     });
-  
+
     const createdUser = await User.findById(user._id).select(
       "-password -refreshToken"
     );
-  
+
     if (!createdUser) {
       throw new ApiError(500, "somthing went wrong while creating user");
     }
-  
+
     try {
       await sendEmail({
         email: createdUser.email,
@@ -84,7 +88,7 @@ const registerUser = asyncHandler(async (req, res) => {
     } catch (error) {
       throw new ApiError(401, "failed to send verification email", error);
     }
-  
+
     return res
       .status(201)
       .json(
@@ -97,11 +101,14 @@ const registerUser = asyncHandler(async (req, res) => {
       );
   } catch (error) {
     console.log("error creating user", error);
-    if(avatar){
+    if (avatar) {
       await deleteOnCloudinary(avatar.public_id);
     }
 
-    throw new ApiError(500, "somthing went wrong while creating user and avatar delete from Cloudinary");
+    throw new ApiError(
+      500,
+      "somthing went wrong while creating user and avatar delete from Cloudinary"
+    );
   }
 });
 //login user
@@ -110,13 +117,11 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!email || !password) {
     throw new ApiError(400, "Email Or Password Field Missing");
   }
-  const user = await User.findOne({
-    $or: [{ email }],
-  });
+  const user = await User.findOne({ email });
   if (!user) {
     throw new ApiError(401, "invalid credintials no user found");
   }
-  const isPasswordValid = await isPasswordCorrect(password);
+  const isPasswordValid = await user.isPasswordCorrect(password);
   if (!isPasswordValid) {
     throw new ApiError(401, "invalid credintials password incorrect");
   }
@@ -144,8 +149,8 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 //verifyemail
 const verifyEmail = asyncHandler(async (req, res) => {
-  console.log("token :",req.body);
-  
+  console.log("token :", req.body);
+
   const { token } = req.body;
   const user = await User.findOne({
     verifyToken: token,
